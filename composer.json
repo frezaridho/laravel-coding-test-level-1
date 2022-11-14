@@ -12,6 +12,7 @@
         "laravel/helpers": "^1.5",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "laravel/ui": "^3.0",
         "ramsey/uuid": "^4.6"
     },
     "require-dev": {
