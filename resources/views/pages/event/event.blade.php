@@ -120,6 +120,13 @@
 </div>
 
 <script>
+var cookieVal = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('bearerToken'))
+        .split('=')[1];
+
+var csrf = $("meta[name='csrf-token']").attr("content");
+
 var oTable;
 // Get All Events
 $(document).ready(function () {
@@ -128,6 +135,8 @@ var table = $('#tableEvent').DataTable({
             url: '/api/v1/events',
             type: 'GET',
             headers: {
+                "Authorization": `Bearer ${cookieVal}`,
+                "X-CSRF-TOKEN": `${csrf}`,
                 'Accept':'application/json'
             },
         },
@@ -168,7 +177,9 @@ $(document).on('click', '#viewEvent', function () {
         type: 'GET',
         dataType: 'json',
         headers: {
-          'Accept': 'application/json'
+            "Authorization": `Bearer ${cookieVal}`,
+            "X-CSRF-TOKEN": `${csrf}`,
+            'Accept': 'application/json'
         },
         success: function(data) {
             $('#dataEvent').empty();
@@ -263,7 +274,8 @@ $(document).on('submit', '#createEvent', function(e) {
         dataType: 'json',
         headers: {
           'Accept': 'application/json',
-          'X-CSRF-TOKEN': `${csrf}`
+          "Authorization": `Bearer ${cookieVal}`,
+          "X-CSRF-TOKEN": `${csrf}`,
         },
         data: {
           "name": name.val(),
@@ -307,7 +319,9 @@ $(document).on('click', '#editEvent', function () {
         type: 'GET',
         dataType: 'json',
         headers: {
-          'Accept': 'application/json'
+            "Authorization": `Bearer ${cookieVal}`,
+            "X-CSRF-TOKEN": `${csrf}`,
+            'Accept': 'application/json'
         },
         success: function(data) {
             document.getElementById('idEvent').value = data.data.id;
@@ -387,7 +401,8 @@ $('#updateEvent').submit(function (e) {
         dataType: 'json',
         headers: {
           'Accept': 'application/json',
-          'X-CSRF-TOKEN': `${csrf}`
+          "Authorization": `Bearer ${cookieVal}`,
+          "X-CSRF-TOKEN": `${csrf}`,
         },
         data: {
           "name": updateName.val(),
@@ -431,7 +446,8 @@ $(document).on('click', '#deleteEvent', function (e) {
         type: "DELETE",
         dataType: "json",
         headers: {
-            'X-CSRF-TOKEN':`${csrf}`,
+            "Authorization": `Bearer ${cookieVal}`,
+            "X-CSRF-TOKEN": `${csrf}`,
             'Accept':'application/json'
         },
         success:function () {
