@@ -43,7 +43,12 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link btn" id="userName" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                            <ul class="dropdown-menu">
+                                <li><button type="submit" class="dropdown-item" onclick="logout()">Logout</button></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -54,4 +59,40 @@
         </main>
     </div>
 </body>
+
+<script>
+var cookieVal = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('bearerToken'))
+        .split('=')[1];
+
+var userName = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('userName'))
+    .split('=')[1];
+
+var csrf = $("meta[name='csrf-token']").attr("content");
+
+function logout() {
+    $.ajax({
+        url: "/api/auth/logout",
+        type: "POST",
+        dataType: "json",
+        headers: {
+            'X-CSRF-TOKEN':`${csrf}`,
+            'Authorization': 'Bearer ' + cookieVal,
+            'Accept':'application/json'
+        },
+        success:function () {
+            location.replace('/');
+            document.cookie="bearerToken=";
+            document.cookie="app_event_session=";
+            document.cookie="XSRF-TOKEN=";
+            document.cookie="userName=";
+        }
+    });
+}
+
+$("#userName").append(userName);
+</script>
 </html>
